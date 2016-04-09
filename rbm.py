@@ -23,10 +23,10 @@ class RBM(object):
         self.w_positive_grad = tf.matmul(tf.transpose(self.x), self.h0)
         self.w_negative_grad = tf.matmul(tf.transpose(self.v1), self.h1)
 
-        # compute updates
-        self.update_w = self.weights['w'] + alpha * (self.w_positive_grad - self.w_negative_grad)
-        self.update_vb = self.weights['vb'] + alpha * tf.reduce_mean(self.x - self.v1, 0)
-        self.update_hb = self.weights['hb'] + alpha * tf.reduce_mean(self.h0 - self.h1, 0)
+        # compute updates and add them to weights
+        self.update_w = self.weights['w'].assign_add(alpha * (self.w_positive_grad - self.w_negative_grad))
+        self.update_vb = self.weights['vb'].assign_add(alpha * tf.reduce_mean(self.x - self.v1, 0))
+        self.update_hb = self.weights['hb'].assign_add(alpha * tf.reduce_mean(self.h0 - self.h1, 0))
 
         # sampling
         self.h_sample = self.sample_prob(transfer_function(tf.matmul(self.x, self.weights['w']) + self.weights['hb']))
@@ -34,8 +34,7 @@ class RBM(object):
             transfer_function(tf.matmul(self.h_sample, tf.transpose(self.weights['w'])) + self.weights['vb']))
 
         # cost
-        self.err = self.x - self.v_sample
-        self.err_sum = tf.reduce_mean(self.err * self.err)
+        self.err_sum = tf.reduce_mean(tf.square(self.x - self.v_sample))
 
         init = tf.initialize_all_variables()
         self.sess = tf.Session()
@@ -60,7 +59,6 @@ class RBM(object):
 
     def save_weights(self, path):
         saver = tf.train.Saver({'rbmw': self.weights['w'],
-                                'rbmvb': self.weights['vb'],
                                 'rbmhb': self.weights['hb']})
         save_path = saver.save(self.sess, path)
 
@@ -70,12 +68,9 @@ class RBM(object):
     def return_hidden_weight_as_np(self, name):
         return self.weights[name].eval(self.sess)
 
-    def partial_fit(self, X):
-        sess = self.sess
-        n_w = sess.run(self.update_w, feed_dict={self.x: X})
-        n_vb = sess.run(self.update_vb, feed_dict={self.x: X})
-        n_hb = sess.run(self.update_hb, feed_dict={self.x: X})
-        sess.run(self.weights['w'].assign(n_w))
-        sess.run(self.weights['vb'].assign(n_vb))
-        sess.run(self.weights['hb'].assign(n_hb))
-        return sess.run(self.err_sum, feed_dict={self.x: X})
+    def partial_fit(self, batch_x):
+        self.sess.run([self.update_w,
+                       self.update_vb,
+                       self.update_hb], {self.x: batch_x})
+
+        return self.sess.run(self.err_sum, feed_dict={self.x: batch_x})
