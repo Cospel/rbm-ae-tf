@@ -1,13 +1,12 @@
-# refactored from https://www.snip2code.com/Snippet/1059693/RBM-procedure-using-tensorflow
-
 import tensorflow as tf
 
 
 class RBM(object):
-    def __init__(self, n_input, n_hidden, alpha=0.1, transfer_function=tf.nn.sigmoid):
+    def __init__(self, n_input, n_hidden, layer_names, alpha=0.1, transfer_function=tf.nn.sigmoid):
         self.n_input = n_input
         self.n_hidden = n_hidden
         self.transfer = transfer_function
+        self.layer_names = layer_names
 
         network_weights = self._initialize_weights()
         self.weights = network_weights
@@ -45,9 +44,9 @@ class RBM(object):
 
     def _initialize_weights(self):
         all_weights = dict()
-        all_weights['w'] = tf.Variable(tf.zeros([self.n_input, self.n_hidden], dtype=tf.float32), name='rbmw')
-        all_weights['vb'] = tf.Variable(tf.zeros([self.n_input], dtype=tf.float32), name='rbmvb')
-        all_weights['hb'] = tf.Variable(tf.zeros([self.n_hidden], dtype=tf.float32), name='rbmhb')
+        all_weights['w'] = tf.Variable(tf.zeros([self.n_input, self.n_hidden], dtype=tf.float32), name=self.layer_names[0])
+        all_weights['vb'] = tf.Variable(tf.zeros([self.n_input], dtype=tf.float32), name=self.layer_names[1])
+        all_weights['hb'] = tf.Variable(tf.zeros([self.n_hidden], dtype=tf.float32), name=self.layer_names[2])
         return all_weights
 
     def transform(self, X):
@@ -58,8 +57,9 @@ class RBM(object):
         saver.restore(self.sess, path)
 
     def save_weights(self, path):
-        saver = tf.train.Saver({'rbmw': self.weights['w'],
-                                'rbmhb': self.weights['hb']})
+        saver = tf.train.Saver({self.layer_names[0]: self.weights['w'],
+                                self.layer_names[1]: self.weights['vb'],
+                                self.layer_names[2]: self.weights['hb']})
         save_path = saver.save(self.sess, path)
 
     def return_weights(self):

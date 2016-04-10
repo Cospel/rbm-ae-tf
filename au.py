@@ -1,30 +1,31 @@
-# refactored from https://gist.github.com/saliksyed/593c950ba1a3b9dd08d5
-
 import tensorflow as tf
-import math
+from utilsnn import xavier_init
 
 
 class AutoEncoder(object):
     def __init__(self, input_size, layer_sizes, layer_names, optimizer=tf.train.AdamOptimizer(),
-                 transfer_function=tf.nn.tanh):
+                 transfer_function=tf.nn.sigmoid):
         # Build the encoding layers
         self.x = tf.placeholder("float", [None, input_size])
         next_layer_input = self.x
 
+        assert len(layer_sizes) == len(layer_names)
+
         self.encoding_matrices = []
-        for dim in layer_sizes:
+        self.encoding_biases = []
+        for i in range(len(layer_sizes)):
+            dim = layer_sizes[i]
             input_dim = int(next_layer_input.get_shape()[1])
 
-            # Initialize W using random values in interval [-1/sqrt(n) , 1/sqrt(n)]
-            W = tf.Variable(
-                tf.random_uniform([input_dim, dim], -1.0 / math.sqrt(input_dim), 1.0 / math.sqrt(input_dim)),
-                name='rbmw')
+            # Initialize W using xavier initialization]
+            W = tf.Variable(xavier_init(input_dim, dim, transfer_function), name=layer_names[i][0])
 
             # Initialize b to zero
-            b = tf.Variable(tf.zeros([dim]), name='rbmhb')
+            b = tf.Variable(tf.zeros([dim]), name=layer_names[i][1])
 
             # We are going to use tied-weights so store the W matrix for later reference.
             self.encoding_matrices.append(W)
+            self.encoding_biases.append(b)
 
             output = transfer_function(tf.matmul(next_layer_input, W) + b)
 
@@ -45,6 +46,9 @@ class AutoEncoder(object):
             output = transfer_function(tf.matmul(next_layer_input, W) + b)
             next_layer_input = output
 
+        # i need to reverse the encoding matrices back for loading weights
+        self.encoding_matrices.reverse()
+
         # the fully encoded and reconstructed value of x is here:
         self.reconstructed_x = next_layer_input
 
@@ -63,8 +67,9 @@ class AutoEncoder(object):
     def reconstruct(self, X):
         return self.sess.run(self.reconstructed_x, feed_dict={self.x: X})
 
-    def restore_weights(self, path):
-        saver = tf.train.Saver({'rbmw': self.encoding_matrices[0]})
+    def restore_weights(self, path, layer_names, layer):
+        saver = tf.train.Saver({layer_names[0]: self.encoding_matrices[layer]},
+                               {layer_names[1]: self.encoding_biases[layer]})
         saver.restore(self.sess, path)
 
     def save_weights(self, path):
