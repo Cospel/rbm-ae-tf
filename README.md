@@ -1,4 +1,4 @@
-# rbm-tf
+# rbm-ae-tf
 Tensorflow implementation of Restricted Boltzman Machine and Autoencoder for layerwise pretraining of Deep Autoencoders with RBM.
 
 More in this paper:
