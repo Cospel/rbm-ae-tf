@@ -13,4 +13,8 @@ I used similar api for RBM and Autoencoder classes to models from official tenso
 
 Feel free to make updates, repairs...!
 
+I would like to enhance implementation with some tips from:
+
+##### https://www.cs.toronto.edu/~hinton/absps/guideTR.pdf
+
 Check test-au.py and test-rbm.py for usages!
