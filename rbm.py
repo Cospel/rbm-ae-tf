@@ -44,9 +44,10 @@ class RBM(object):
 
     def _initialize_weights(self):
         all_weights = dict()
-        all_weights['w'] = tf.Variable(tf.zeros([self.n_input, self.n_hidden], dtype=tf.float32), name=self.layer_names[0])
+        all_weights['w'] = tf.Variable(tf.random_normal([self.n_input, self.n_hidden], stddev=0.01, dtype=tf.float32),
+                                       name=self.layer_names[0])
         all_weights['vb'] = tf.Variable(tf.zeros([self.n_input], dtype=tf.float32), name=self.layer_names[1])
-        all_weights['hb'] = tf.Variable(tf.zeros([self.n_hidden], dtype=tf.float32), name=self.layer_names[2])
+        all_weights['hb'] = tf.Variable(tf.random_uniform([self.n_hidden], dtype=tf.float32), name=self.layer_names[2])
         return all_weights
 
     def transform(self, X):
