@@ -10,3 +10,5 @@ I was inspired with these implementations but need to refactor them:
 # https://gist.github.com/saliksyed/593c950ba1a3b9dd08d5
 
 Feel free to make updates, repairs...!
+
+Check test-au.py and test-rbm.py for usages!
