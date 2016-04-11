@@ -54,7 +54,9 @@ class RBM(object):
         return self.sess.run(self.h1, {self.x: X})
 
     def restore_weights(self, path):
-        saver = tf.train.Saver()
+        saver = tf.train.Saver({self.layer_names[0]: self.weights['w'],
+                                self.layer_names[1]: self.weights['vb'],
+                                self.layer_names[2]: self.weights['hb']})
         saver.restore(self.sess, path)
 
     def save_weights(self, path):

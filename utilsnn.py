@@ -1,6 +1,18 @@
 import numpy as np
 import tensorflow as tf
+import sklearn.preprocessing as prep
 
+def min_max_scale(X_train, X_test):
+    preprocessor = prep.MinMaxScaler().fit(np.concatenate((X_train, X_test), axis=0))
+    X_train = preprocessor.transform(X_train)
+    X_test = preprocessor.transform(X_test)
+    return X_train, X_test
+
+def mean_normalization(X_train, X_test):
+    data = np.concatenate((X_train, X_test), axis=0)
+    mean = data.mean(axis=0)
+    std  = data.std(axis=0)
+    return (X_train - mean)/std, (X_test - mean)/std
 
 def xavier_init(fan_in, fan_out, function):
     if function is tf.nn.sigmoid:
