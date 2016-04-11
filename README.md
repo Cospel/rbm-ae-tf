@@ -1,4 +1,4 @@
-# rbm-tf
+# rbm-ae-tf
 Tensorflow implementation of Restricted Boltzman Machine and Autoencoder for layerwise pretraining of Deep Autoencoders with RBM.
 
 More in this paper:
@@ -12,5 +12,9 @@ I was inspired with these implementations but need to refactor them and improve 
 I used similar api for RBM and Autoencoder classes to models from official tensorflow/models.
 
 Feel free to make updates, repairs...!
+
+I would like to enhance implementation with some tips from:
+
+##### https://www.cs.toronto.edu/~hinton/absps/guideTR.pdf
 
 Check test-au.py and test-rbm.py for usages!
