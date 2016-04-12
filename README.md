@@ -24,16 +24,17 @@ rbmobject2 = RBM(100, 20, ['rbmw2', 'rbvb2', 'rbmhb2'], 0.001)
 
 # Autoencoder
 autoencoder = AutoEncoder(784, [100, 20],  [['rbmw1', 'rbmhb1'],
-                                            ['rbmw2', 'rbmhb2']])
+                                            ['rbmw2', 'rbmhb2']],
+                                           tied_weights=False)
 
 # Train First RBM
-for i in range(10000):
+for i in range(100):
   batch_xs, batch_ys = mnist.train.next_batch(10)
   cost = rbmobject1.partial_fit(batch_xs)
 rbmobject1.save_weights('./rbmw1.chp')
 
 # Train Second RBM
-for i in range(10000):
+for i in range(100):
   # Transform features with first rbm for second rbm
   batch_xs, batch_ys = mnist.train.next_batch(10)
   batch_xs = rbmobject1.transform(batch_xs)
@@ -41,13 +42,16 @@ for i in range(10000):
 rbmobject2.save_weights('./rbmw2.chp')
 
 # Load RBM weights to Autoencoder
-autoencoder.load_weights('./rbmw1.chp', ['rbmw1', 'rbmhb1'], 0)
-autoencoder.load_weights('./rbmw2.chp', ['rbmw2', 'rbmhb2'], 1)
+autoencoder.load_rbm_weights('./rbmw1.chp', ['rbmw1', 'rbmhb1'], 0)
+autoencoder.load_rbm_weights('./rbmw2.chp', ['rbmw2', 'rbmhb2'], 1)
 
 # Train Autoencoder
-for i in range(5000):
+for i in range(500):
   batch_xs, batch_ys = mnist.train.next_batch(10)
   cost = autoencoder.partial_fit(batch_xs)
+
+autoencoder.save_weights('./au.chp')
+autoencoder.load_weights('./au.chp')
 ```
 
 I was inspired with these implementations but I need to refactor them and improve them(BIG THANKS to THEM). I tried to use also similar api as it is in [tensorflow/models](https://github.com/tensorflow/models):
