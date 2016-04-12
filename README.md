@@ -29,7 +29,7 @@ autoencoder = AutoEncoder(784, [100, 20],  [['rbmw1', 'rbmhb1'],
 # Train First RBM
 for i in range(10000):
   batch_xs, batch_ys = mnist.train.next_batch(10)
-  print(rbmobject1.partial_fit(batch_xs))
+  cost = rbmobject1.partial_fit(batch_xs)
 
 data_new = rbmobject1.transform(mnist.train.next_batch(10000)[0])
 rbmobject1.save_weights('./rbmw1.chp')
@@ -39,7 +39,7 @@ for i in range(10000):
   # Transform features with first rbm to second rbm
   batch_xs, batch_ys = mnist.train.next_batch(10)
   batch_xs = rbmobject1.transform(batch_xs)
-  print(rbmobject2.partial_fit(batch_xs))
+  cost = rbmobject2.partial_fit(batch_xs)
 
 # Load RBM weights to Autoencoder
 autoencoder.restore_weights('./rbmw1.chp', ['rbmw1', 'rbmhb1'], 0)
@@ -51,7 +51,7 @@ for i in range(5000):
   cost = autoencoder.partial_fit(batch_xs)
 ```
 
-I was inspired with these implementations but I need to refactor them and improve them(thanks). I tried to use also similar api as it is in [tensorflow/models](https://github.com/tensorflow/models):
+I was inspired with these implementations but I need to refactor them and improve them(BIG THANKS to THEM). I tried to use also similar api as it is in [tensorflow/models](https://github.com/tensorflow/models):
 > [LINK1](https://www.snip2code.com/Snippet/1059693/RBM-procedure-using-tensorflow)
 > [LINK2](https://gist.github.com/saliksyed/593c950ba1a3b9dd08d5)
 
