@@ -24,7 +24,8 @@ rbmobject2 = RBM(100, 20, ['rbmw2', 'rbvb2', 'rbmhb2'], 0.001)
 
 # Autoencoder
 autoencoder = AutoEncoder(784, [100, 20],  [['rbmw1', 'rbmhb1'],
-                                            ['rbmw2', 'rbmhb2']])
+                                            ['rbmw2', 'rbmhb2']],
+                                            tied_weights=True)
 
 # Train First RBM
 for i in range(10000):
