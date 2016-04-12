@@ -44,8 +44,6 @@ class AutoEncoder(object):
         self.decoding_biases = []
 
         for i, dim in enumerate(layer_sizes[1:] + [int(self.x.get_shape()[1])]):
-            print('test')
-            print(self.encoding_matrices[i].get_shape())
             W = None
             # if we are using tied weights, so just lookup the encoding matrix for this step and transpose it
             if tied_weights:
