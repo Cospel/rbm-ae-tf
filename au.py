@@ -79,7 +79,7 @@ class AutoEncoder(object):
     def reconstruct(self, X):
         return self.sess.run(self.reconstructed_x, feed_dict={self.x: X})
 
-    def restore_tied_weights(self, path, layer_names, layer):
+    def load_weights(self, path, layer_names, layer):
         saver = tf.train.Saver({layer_names[0]: self.encoding_matrices[layer]},
                                {layer_names[1]: self.encoding_biases[layer]})
         saver.restore(self.sess, path)
@@ -88,9 +88,9 @@ class AutoEncoder(object):
             self.sess.run(self.decoding_matrices[layer].assign(tf.transpose(self.encoding_matrices[layer])))
 
     def print_weights(self):
-        print('encoding matrices')
+        print('Matrices')
         for i in range(len(self.encoding_matrices)):
-            print(i)
+            print('Matrice',i)
             print(self.encoding_matrices[i].eval(self.sess).shape)
             print(self.encoding_matrices[i].eval(self.sess))
             if not self.tied_weights:
@@ -98,10 +98,9 @@ class AutoEncoder(object):
                 print(self.decoding_matrices[i].eval(self.sess))
 
     def save_weights(self, path):
-        pass
-
-    def return_weights(self):
-        pass
+        dict_w = { }
+        saver = tf.train.Saver
+        save_path = saver.save(self.sess, path)
 
     def partial_fit(self, X):
         cost, opt = self.sess.run((self.cost, self.optimizer), feed_dict={self.x: X})
