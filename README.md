@@ -5,7 +5,7 @@ More about pretraining of weights in this paper:
 
 ##### [Reducing the Dimensionality of Data with Neural Networks](https://www.cs.toronto.edu/~hinton/science.pdf)
 
-```
+```python
 from rbm import RBM
 from au import AutoEncoder
 import tensorflow as tf
