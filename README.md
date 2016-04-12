@@ -11,12 +11,13 @@ from au import AutoEncoder
 import tensorflow as tf
 import input_data
 
+# load mnist data
 flags = tf.app.flags
 FLAGS = flags.FLAGS
 flags.DEFINE_string('data_dir', '/tmp/data/', 'Directory for storing data')
+mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
 
 # First RBM
-mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
 rbmobject1 = RBM(784, 100, ['rbmw1', 'rbvb1', 'rbmhb1'], 0.001)
 
 # Second RBM
