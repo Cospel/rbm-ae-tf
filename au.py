@@ -19,7 +19,7 @@ class AutoEncoder(object):
             input_dim = int(next_layer_input.get_shape()[1])
 
             # Initialize W using xavier initialization]
-            W = tf.Variable(tf.zeros([input_dim, dim]), name=layer_names[i][0])
+            W = tf.Variable(xavier_init(input_dim, dim, transfer_function), name=layer_names[i][0])
 
             # Initialize b to zero
             b = tf.Variable(tf.zeros([dim]), name=layer_names[i][1])
@@ -51,7 +51,7 @@ class AutoEncoder(object):
             if tied_weights:
                 W = tf.identity(tf.transpose(self.encoding_matrices[i]))
             else:
-                W = tf.Variable(tf.zeros([self.encoding_matrices[i].get_shape()[1],self.encoding_matrices[i].get_shape()[0]]))
+                W = tf.Variable(xavier_init(self.encoding_matrices[i].get_shape()[1].value,self.encoding_matrices[i].get_shape()[0].value, transfer_function))
             b = tf.Variable(tf.zeros([dim]))
             self.decoding_matrices.append(W)
             self.decoding_biases.append(b)
