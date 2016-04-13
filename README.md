@@ -55,8 +55,8 @@ autoencoder.load_weights('./au.chp')
 ```
 
 I was inspired with these implementations but I need to refactor them and improve them. I tried to use also similar api as it is in [tensorflow/models](https://github.com/tensorflow/models):
-> [LINK1](https://www.snip2code.com/Snippet/1059693/RBM-procedure-using-tensorflow)
-> [LINK2](https://gist.github.com/saliksyed/593c950ba1a3b9dd08d5)
+> [myme5261314 LINK1](https://gist.github.com/myme5261314/005ceac0483fc5a581cc)
+> [saliksyed LINK2](https://gist.github.com/saliksyed/593c950ba1a3b9dd08d5)
 > Thank you!
 
 Feel free to make updates, repairs. You can enhance implementation with some tips from:
