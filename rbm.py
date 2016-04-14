@@ -3,7 +3,7 @@ import numpy as np
 
 
 class RBM(object):
-    def __init__(self, n_input, n_hidden, layer_names, alpha=0.1, transfer_function=tf.nn.sigmoid):
+    def __init__(self, n_input, n_hidden, layer_names, alpha=1.0, transfer_function=tf.nn.sigmoid):
         self.n_input = n_input
         self.n_hidden = n_hidden
         self.transfer = transfer_function
@@ -14,15 +14,15 @@ class RBM(object):
 
         # placeholders
         self.x = tf.placeholder(tf.float32, [None, self.n_input])
-        self.rbm_w = tf.placeholder(tf.float32, [self.n_input, self.n_hidden])
-        self.rbm_vb = tf.placeholder(tf.float32, [self.n_input])
-        self.rbm_hb = tf.placeholder(tf.float32, [self.n_hidden])
+        self.rbm_w = tf.placeholder(tf.float32,[self.n_input, self.n_hidden])
+        self.rbm_vb = tf.placeholder(tf.float32,[self.n_input])
+        self.rbm_hb = tf.placeholder(tf.float32,[self.n_hidden])
 
         # variables
         self.n_w = np.zeros([self.n_input, self.n_hidden], np.float32)
         self.n_vb = np.zeros([self.n_input], np.float32)
         self.n_hb = np.zeros([self.n_hidden], np.float32)
-        self.o_w = np.zeros([self.n_input, self.n_hidden], np.float32)
+        self.o_w = np.random.normal(0.0, 0.01, [self.n_input, self.n_hidden])
         self.o_vb = np.zeros([self.n_input], np.float32)
         self.o_hb = np.zeros([self.n_hidden], np.float32)
 
@@ -36,7 +36,6 @@ class RBM(object):
         self.w_positive_grad = tf.matmul(tf.transpose(self.x), self.h0)
         self.w_negative_grad = tf.matmul(tf.transpose(self.v1), self.h1)
 
-        # compute updates and add them to weights
         self.update_w = self.rbm_w + alpha * (self.w_positive_grad - self.w_negative_grad) / tf.to_float(
             tf.shape(self.x)[0])
         self.update_vb = self.rbm_vb + alpha * tf.reduce_mean(self.x - self.v1, 0)
@@ -56,7 +55,7 @@ class RBM(object):
 
     def compute_cost(self, batch):
         return self.sess.run(self.err_sum, feed_dict={self.x: batch, self.rbm_w: self.o_w,
-                                                      self.rbm_vb: self.o_vb, self.rbm_hb: self.o_hb})
+                                                                  self.rbm_vb: self.o_vb, self.rbm_hb: self.o_hb})
 
     def sample_prob(self, probs):
         return tf.nn.relu(tf.sign(probs - tf.random_uniform(tf.shape(probs))))
@@ -86,6 +85,9 @@ class RBM(object):
 
 
     def save_weights(self, path):
+        self.sess.run(self.weights['w'].assign(self.o_w))
+        self.sess.run(self.weights['vb'].assign(self.o_vb))
+        self.sess.run(self.weights['hb'].assign(self.o_hb))
         saver = tf.train.Saver({self.layer_names[0]: self.weights['w'],
                                 self.layer_names[1]: self.weights['vb'],
                                 self.layer_names[2]: self.weights['hb']})
@@ -106,8 +108,5 @@ class RBM(object):
         self.o_vb = self.n_vb
         self.o_hb = self.n_hb
 
-        self.sess.run(self.weights['w'].assign(self.o_w))
-        self.sess.run(self.weights['vb'].assign(self.o_vb))
-        self.sess.run(self.weights['hb'].assign(self.o_hb))
         return self.sess.run(self.err_sum, feed_dict={self.x: batch_x, self.rbm_w: self.n_w, self.rbm_vb: self.n_vb,
                                                       self.rbm_hb: self.n_hb})
