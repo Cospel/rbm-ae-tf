@@ -2,6 +2,10 @@ import numpy as np
 import tensorflow as tf
 import sklearn.preprocessing as prep
 
+def get_random_block_from_data(data, batch_size):
+    start_index = np.random.randint(0, len(data) - batch_size)
+    return data[start_index:(start_index + batch_size)]
+
 def min_max_scale(X_train, X_test):
     preprocessor = prep.MinMaxScaler().fit(np.concatenate((X_train, X_test), axis=0))
     X_train = preprocessor.transform(X_train)
