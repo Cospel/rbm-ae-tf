@@ -2,9 +2,9 @@
 Tensorflow implementation of Restricted Boltzman Machine and Autoencoder for layerwise pretraining of Deep Autoencoders with RBM. Idea is to first create RBMs for pretraining weights for autoencoder. Then weigts for autoencoder are loaded and autoencoder is trained again. In this implementation you can also use tied weights for autoencoder(that means that encoding and decoding layers have same transposed weights!).
 
 I was inspired with these implementations but I need to refactor them and improve them. I tried to use also similar api as it is in [tensorflow/models](https://github.com/tensorflow/models):
-> [myme5261314 LINK1](https://gist.github.com/myme5261314/005ceac0483fc5a581cc)
+> [myme5261314](https://gist.github.com/myme5261314/005ceac0483fc5a581cc)
 
-> [saliksyed LINK2](https://gist.github.com/saliksyed/593c950ba1a3b9dd08d5)
+> [saliksyed](https://gist.github.com/saliksyed/593c950ba1a3b9dd08d5)
 
 > Thank you for your gists!
 
