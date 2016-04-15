@@ -29,8 +29,7 @@ class RBM(object):
 
         # models
         self.h0 = self.sample_prob(transfer_function(tf.matmul(self.x, self.rbm_w) + self.rbm_hb))
-        self.v1 = self.sample_prob(
-            transfer_function(tf.matmul(self.h0, tf.transpose(self.rbm_w)) + self.rbm_vb))
+        self.v1 = transfer_function(tf.matmul(self.h0, tf.transpose(self.rbm_w)) + self.rbm_vb)
         self.h1 = tf.nn.sigmoid(tf.matmul(self.v1, self.rbm_w) + self.rbm_hb)
 
         # compute gradients
@@ -44,8 +43,7 @@ class RBM(object):
 
         # sampling
         self.h_sample = self.sample_prob(transfer_function(tf.matmul(self.x, self.rbm_w) + self.rbm_hb))
-        self.v_sample = self.sample_prob(
-            transfer_function(tf.matmul(self.h_sample, tf.transpose(self.rbm_w)) + self.rbm_vb))
+        self.v_sample = transfer_function(tf.matmul(self.h_sample, tf.transpose(self.rbm_w)) + self.rbm_vb)
 
         # cost
         self.err_sum = tf.reduce_mean(tf.square(self.x - self.v_sample))
