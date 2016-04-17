@@ -66,5 +66,5 @@ Feel free to make updates, repairs. You can enhance implementation with some tip
 
 ##### PCA vs DeepAutoencoder(RBM) on MNIST:
 
-![alt tag](https://raw.githubusercontent.com/Cospel/rbm-ae-tf/master/test-img/pcafig.png)
-![alt tag](https://raw.githubusercontent.com/Cospel/rbm-ae-tf/master/test-img/deepauto.png)
+![alt tag](https://raw.githubusercontent.com/Cospel/rbm-ae-tf/master/test-img/pcafig.png =200x200)
+![alt tag](https://raw.githubusercontent.com/Cospel/rbm-ae-tf/master/test-img/deepauto.png =200x200)
