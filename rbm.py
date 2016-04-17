@@ -1,4 +1,3 @@
-# forked from https://gist.github.com/myme5261314/005ceac0483fc5a581cc
 import tensorflow as tf
 import numpy as np
 
