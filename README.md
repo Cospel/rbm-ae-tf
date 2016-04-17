@@ -63,3 +63,8 @@ autoencoder.load_weights('./au.chp')
 
 Feel free to make updates, repairs. You can enhance implementation with some tips from:
 > [Practical Guide to training RBM](https://www.cs.toronto.edu/~hinton/absps/guideTR.pdf)
+
+PCA vs RBM/DEEPAUTOENCODER:
+
+![alt tag](https://raw.githubusercontent.com/Cospel/rbm-ae-tf/master/test-img/pcafig.png)
+![alt tag](https://raw.githubusercontent.com/Cospel/rbm-ae-tf/master/test-img/deepauto.png)
