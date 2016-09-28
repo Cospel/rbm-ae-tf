@@ -56,7 +56,7 @@ class RBM(object):
         self.update_w = self.rbm_w + alpha * (self.w_positive_grad - self.w_negative_grad) / tf.to_float(
             tf.shape(self.x)[0])
         self.update_vb = self.rbm_vb + alpha * tf.reduce_mean(self.x - self.v1, 0)
-        self.update_hb = self.rbm_hb + alpha * tf.reduce_mean(self.h0 - self.h1, 0)
+        self.update_hb = self.rbm_hb + alpha * tf.reduce_mean(self.h0prob  - self.h1, 0)
 
         # sampling functions
         self.h_sample = transfer_function(tf.matmul(self.x, self.rbm_w) + self.rbm_hb)
