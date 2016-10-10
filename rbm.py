@@ -37,11 +37,12 @@ class RBM(object):
         # 1. set visible state to training sample(x) and compute hidden state(h0) of data
         #    then we have binary units of hidden state computed. It is very important to make these
         #    hidden states binary, rather than using the probabilities themselves. (see Hinton paper)
-        self.h0 = self.sample_prob(transfer_function(tf.matmul(self.x, self.rbm_w) + self.rbm_hb))
+        self.h0prob = transfer_function(tf.matmul(self.x, self.rbm_w) + self.rbm_hb)
+        self.h0 = self.sample_prob(self.h0prob)
         # 2. compute new visible state of reconstruction based on computed hidden state reconstruction.
         #    However, it is common to use the probability, instead of sampling a binary value.
         #    So this can be binary or probability(so i choose to not use sampled probability)
-        self.v1 = transfer_function(tf.matmul(self.h0, tf.transpose(self.rbm_w)) + self.rbm_vb)
+        self.v1 = transfer_function(tf.matmul(self.h0prob, tf.transpose(self.rbm_w)) + self.rbm_vb)
         # 3. compute new hidden state of reconstruction based on computed visible reconstruction
         #    When hidden units are being driven by reconstructions, always use probabilities without sampling.
         self.h1 = tf.nn.sigmoid(tf.matmul(self.v1, self.rbm_w) + self.rbm_hb)
@@ -55,7 +56,7 @@ class RBM(object):
         self.update_w = self.rbm_w + alpha * (self.w_positive_grad - self.w_negative_grad) / tf.to_float(
             tf.shape(self.x)[0])
         self.update_vb = self.rbm_vb + alpha * tf.reduce_mean(self.x - self.v1, 0)
-        self.update_hb = self.rbm_hb + alpha * tf.reduce_mean(self.h0 - self.h1, 0)
+        self.update_hb = self.rbm_hb + alpha * tf.reduce_mean(self.h0prob  - self.h1, 0)
 
         # sampling functions
         self.h_sample = transfer_function(tf.matmul(self.x, self.rbm_w) + self.rbm_hb)
