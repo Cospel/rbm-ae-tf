@@ -11,6 +11,7 @@ FLAGS = flags.FLAGS
 flags.DEFINE_string('data_dir', '/tmp/data/', 'Directory for storing data')
 flags.DEFINE_integer('epochs', 50, 'The number of training epochs')
 flags.DEFINE_integer('batchsize', 30, 'The batch size')
+flags.DEFINE_boolean('restore_rbm', False, 'Whether to restore the RBM weights or not.')
 
 # ensure output dir exists
 if not os.path.isdir('out'):
@@ -27,10 +28,11 @@ rbmobject2 = RBM(900, 500, ['rbmw2', 'rbvb2', 'rbmhb2'], 0.3)
 rbmobject3 = RBM(500, 250, ['rbmw3', 'rbvb3', 'rbmhb3'], 0.3)
 rbmobject4 = RBM(250, 2,   ['rbmw4', 'rbvb4', 'rbmhb4'], 0.3)
 
-#rbmobject1.restore_weights('./rbmw1.chp')
-#rbmobject2.restore_weights('./rbmw2.chp')
-#rbmobject3.restore_weights('./rbmw3.chp')
-#rbmobject4.restore_weights('./rbmw4.chp')
+if FLAGS.restore_rbm:
+  rbmobject1.restore_weights('./out/rbmw1.chp')
+  rbmobject2.restore_weights('./out/rbmw2.chp')
+  rbmobject3.restore_weights('./out/rbmw3.chp')
+  rbmobject4.restore_weights('./out/rbmw4.chp')
 
 # Autoencoder
 autoencoder = AutoEncoder(784, [900, 500, 250, 2], [['rbmw1', 'rbmhb1'],
@@ -109,8 +111,8 @@ autoencoder.load_weights('./out/au.chp')
 
 fig, ax = plt.subplots()
 
-print(autoencoder.transform(teX)[:,0])
-print(autoencoder.transform(teX)[:,1])
+print(autoencoder.transform(teX)[:, 0])
+print(autoencoder.transform(teX)[:, 1])
 
 plt.scatter(autoencoder.transform(teX)[:, 0], autoencoder.transform(teX)[:, 1], alpha=0.5)
 plt.show()
