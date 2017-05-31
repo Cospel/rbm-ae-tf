@@ -41,7 +41,7 @@ def maybe_download(filename, work_directory):
       urllib.request.urlretrieve(SOURCE_URL + filename, temp_file_name)
       tf.gfile.Copy(temp_file_name, filepath)
       with tf.gfile.GFile(filepath) as f:
-        size = f.Size()
+        size = f.size()
       print('Successfully downloaded', filename, size, 'bytes.')
   return filepath
 

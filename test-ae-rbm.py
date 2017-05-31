@@ -4,7 +4,6 @@ import tensorflow as tf
 import input_data
 from utilsnn import show_image, min_max_scale
 import matplotlib.pyplot as plt
-import numpy as np
 
 flags = tf.app.flags
 FLAGS = flags.FLAGS
