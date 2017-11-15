@@ -65,7 +65,7 @@ class RBM(object):
         # cost
         self.err_sum = tf.reduce_mean(tf.square(self.x - self.v_sample))
 
-        init = tf.initialize_all_variables()
+        init = tf.global_variables_initializer()
         self.sess = tf.Session()
         self.sess.run(init)
 

@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 import sklearn.preprocessing as prep
-import Image
+from PIL import Image
 from util import tile_raster_images
 
 
